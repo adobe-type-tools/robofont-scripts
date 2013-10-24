@@ -34,8 +34,8 @@ kMaskLayerName = 'mask'
 
 f = CurrentFont()
 
-for g in f.selection:
-	g = f[g]
+for gName in f.selection:
+	g = f[gName]
 	if len(g) or g.components:
 		g.copyToLayer(kMaskLayerName, clear=False)
 		maskGlyph = g.getLayer(kMaskLayerName, clear=False)
