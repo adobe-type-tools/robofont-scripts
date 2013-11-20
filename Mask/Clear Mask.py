@@ -35,6 +35,6 @@ f = CurrentFont()
 for gName in f.selection:
 	g = f[gName]
 	maskGlyph = g.getLayer(kMaskLayerName, clear=False)
-	if len(maskGlyph):
+	if len(maskGlyph) or maskGlyph.components:
 		g.getLayer(kMaskLayerName, clear=True)
 		g.update()
