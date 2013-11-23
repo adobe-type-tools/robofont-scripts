@@ -32,13 +32,30 @@ The glyphs in the 'mask' layer will be decomposed.
 
 kMaskLayerName = 'mask'
 
-f = CurrentFont()
+from AppKit import NSApp
 
-for gName in f.selection:
-	g = f[gName]
+def glyphWindowHasFocus():
+	window = NSApp.orderedWindows()[0]
+	if hasattr(window, "windowName"):
+		if window.windowName() == "GlyphWindow":
+			return True
+	return False
+
+
+def copyGlyphToMask(g):
 	if len(g) or g.components:
 		g.copyToLayer(kMaskLayerName, clear=False)
 		maskGlyph = g.getLayer(kMaskLayerName, clear=False)
 		if maskGlyph.components:
 			maskGlyph.decompose()
 		g.update()
+
+
+if glyphWindowHasFocus():
+	g = CurrentGlyph()
+	copyGlyphToMask(g)	
+else:
+	f = CurrentFont()
+	for gName in f.selection:
+		g = f[gName]
+		copyGlyphToMask(g)	

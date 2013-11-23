@@ -30,11 +30,28 @@ Clears the contents of the layer named 'mask'.
 
 kMaskLayerName = 'mask'
 
-f = CurrentFont()
+from AppKit import NSApp
 
-for gName in f.selection:
-	g = f[gName]
+def glyphWindowHasFocus():
+	window = NSApp.orderedWindows()[0]
+	if hasattr(window, "windowName"):
+		if window.windowName() == "GlyphWindow":
+			return True
+	return False
+
+
+def clearGlyphMask(g):
 	maskGlyph = g.getLayer(kMaskLayerName, clear=False)
 	if len(maskGlyph) or maskGlyph.components:
 		g.getLayer(kMaskLayerName, clear=True)
 		g.update()
+
+
+if glyphWindowHasFocus():
+	g = CurrentGlyph()
+	clearGlyphMask(g)	
+else:
+	f = CurrentFont()
+	for gName in f.selection:
+		g = f[gName]
+		clearGlyphMask(g)	
