@@ -130,7 +130,6 @@ def makeEnc(f, platform):
             if line not in encData:
                 encData.append(line)
 
-        encData = [line for line in encData if not line.startswith('.notdef')]
         encData = [line for line in encData if not line.startswith('NULL')]
         encData = [line for line in encData if not line.startswith('CR')]
 
