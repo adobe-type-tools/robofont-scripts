@@ -125,13 +125,21 @@ def makeEnc(f, platform):
         encData = []
         enc = []
 
-        # avoid duplicate lines
+        # avoid duplicate & empty lines, comments
+        # and unneccessary glyphs:
         for line in raw_encData:
-            if line not in encData:
-                encData.append(line)
+            stripLine = line.strip()
+            if stripLine.startswith('%'):
+                continue
+            if stripLine.startswith('#'):
+                continue
+            if stripLine.startswith('NULL'):
+                continue
+            if stripLine.startswith('CR'):
+                continue
 
-        encData = [line for line in encData if not line.startswith('NULL')]
-        encData = [line for line in encData if not line.startswith('CR')]
+            if stripLine and line not in encData:
+                encData.append(line)
 
         if '\t' in encData[0]:
             # GOADB
