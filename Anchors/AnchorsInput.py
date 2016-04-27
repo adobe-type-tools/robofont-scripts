@@ -1,5 +1,5 @@
 __copyright__ = __license__ =  """
-Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+Copyright (c) 2013-2016 Adobe Systems Incorporated. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -21,22 +21,24 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __doc__ = """
-Anchors Input v1.0 - Feb 21 2013
+Anchors Input v1.1 - Apr 26 2016
 
 Adds anchors to the glyphs by reading the data from external text file(s) named
-anchors_X (where X represents the index of the font's master).
+'anchors'. If the family has more than one master, append '_X' to the name.
+The 'X' must be replaced by the index of the font master, counting from 0.
 The simple text file(s) containing the anchor data must have four tab-separated
 columns that follow this format:
 <glyphName><tab><anchorName><tab><anchorXposition><tab><anchorYposition>
 
 ==================================================
 Versions:
+v1.1 - Apr 26 2016 - Use the same file naming logic as the derivedchars files
 v1.0 - Feb 21 2013 - Initial release
 """
 
 #----------------------------------------
 
-kAnchorsFileName = "anchors_"
+kAnchorsFileName = "anchors"
 
 #----------------------------------------
 
@@ -60,7 +62,10 @@ def readFile(filePath):
 
 def run(font, masterNumber):
 
-	filePath = "%s%s" % (kAnchorsFileName, masterNumber)
+	if masterNumber:
+		filePath = "%s_%s" % (kAnchorsFileName, masterNumber)
+	else:
+		filePath = kAnchorsFileName
 
 	if not os.path.isfile(filePath):
 		print "ERROR: File %s not found." % filePath
@@ -137,7 +142,7 @@ if __name__ == "__main__":
 			masterNumber = fileNameNoExtension.split('_')[-1]
 
 			if not masterNumber.isdigit():
-				masterNumber = '0'
+				masterNumber = None
 
 			os.chdir(folderPath) # Change current directory to the location of the opened font
 			run(font, masterNumber)

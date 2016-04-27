@@ -1,5 +1,5 @@
 __copyright__ = __license__ =  """
-Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
+Copyright (c) 2013-2016 Adobe Systems Incorporated. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -21,19 +21,21 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __doc__ = """
-Anchors Output v1.0 - Feb 21 2013
+Anchors Output v1.1 - Apr 26 2016
 
-Outputs all the anchor data to external text file(s) named anchors_X (where X
-represents the index of the font's master).
+Outputs all the anchor data to external text file(s) named 'anchors'.
+If the family has more than one master, '_X' is appended to the name,
+where 'X' represents the index of the font master, counting from 0.
 
 ==================================================
 Versions:
+v1.1 - Apr 26 2016 - Use the same file naming logic as the derivedchars files
 v1.0 - Feb 21 2013 - Initial release
 """
 
 #----------------------------------------
 
-kAnchorsFileName = "anchors_"
+kAnchorsFileName = "anchors"
 
 #----------------------------------------
 
@@ -71,7 +73,10 @@ def run(font, masterNumber):
 
 
 	# Write file
-	filename = "%s%s" % (kAnchorsFileName, masterNumber)
+	if masterNumber:
+		filename = "%s_%s" % (kAnchorsFileName, masterNumber)
+	else:
+		filename = kAnchorsFileName
 	print "Writing file %s ..." % filename
 	outfile = open(filename, 'w')
 	outfile.writelines(anchorsList)
@@ -95,7 +100,7 @@ if __name__ == "__main__":
 			masterNumber = fileNameNoExtension.split('_')[-1]
 
 			if not masterNumber.isdigit():
-				masterNumber = '0'
+				masterNumber = None
 
 			os.chdir(folderPath) # Change current directory to the location of the opened font
 			run(font, masterNumber)
