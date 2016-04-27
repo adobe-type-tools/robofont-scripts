@@ -1,22 +1,22 @@
 __copyright__ = __license__ =  """
 Copyright (c) 2013 Adobe Systems Incorporated. All rights reserved.
- 
+
 Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the "Software"), 
-to deal in the Software without restriction, including without limitation 
-the rights to use, copy, modify, merge, publish, distribute, sublicense, 
-and/or sell copies of the Software, and to permit persons to whom the 
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
 Software is furnished to do so, subject to the following conditions:
- 
+
 The above copyright notice and this permission notice shall be included in
 all copies or substantial portions of the Software.
- 
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
@@ -61,24 +61,24 @@ def readFile(filePath):
 def run(font, masterNumber):
 
 	filePath = "%s%s" % (kAnchorsFileName, masterNumber)
-	
+
 	if not os.path.isfile(filePath):
 		print "ERROR: File %s not found." % filePath
 		return
-	
+
 	print "Reading file %s ..." % filePath
 	anchorsData = readFile(filePath)
 	anchorsList = []
-	
+
 	for lineIndex in range(len(anchorsData)):
 		anchorValuesList = anchorsData[lineIndex].split('\t')
 		if len(anchorValuesList) != 4: # Four columns: glyph name, anchor name, anchor X postion, anchor Y postion
 			print "ERROR: Line #%d does not have 4 columns. Skipped." % (lineIndex +1)
 			continue
-		
+
 		glyphName = anchorValuesList[0]
 		anchorName = anchorValuesList[1]
-		
+
 		if not len(glyphName) or not len(anchorName):
 			print "ERROR: Line #%d has no glyph name or no anchor name. Skipped." % (lineIndex +1)
 			continue
@@ -89,15 +89,15 @@ def run(font, masterNumber):
 		except:
 			print "ERROR: Line #%d has an invalid anchor position value. Skipped." % (lineIndex +1)
 			continue
-		
+
 		newAnchor = myAnchor(glyphName, anchorName, anchorX, anchorY)
 		anchorsList.append(newAnchor)
-	
+
 
 	if not len(anchorsList):
 		print "No valid anchors data was found."
 		return
-	
+
 
 	# Remove all anchors
 	for glyph in font:
@@ -114,7 +114,7 @@ def run(font, masterNumber):
 		else:
 			print "ERROR: Glyph %s not found in the font." % anchor.parent
 			continue
-		
+
 		glyph.appendAnchor(anchor.name, (anchor.x, anchor.y))
 		glyph.glyphChangedUpdate()
 # 		glyph.mark = 125
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 			folderPath, fileName = os.path.split(font.path)
 			fileNameNoExtension, fileExtension = os.path.splitext(fileName)
 			masterNumber = fileNameNoExtension.split('_')[-1]
-			
+
 			if not masterNumber.isdigit():
 				masterNumber = '0'
 
