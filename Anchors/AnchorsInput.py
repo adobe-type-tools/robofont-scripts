@@ -21,7 +21,7 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __doc__ = """
-Anchors Input v1.1 - Apr 26 2016
+Anchors Input v1.2 - Jun 27 2017
 
 Adds anchors to the glyphs by reading the data from external text file(s) named
 'anchors'. If the family has more than one master, append '_X' to the name.
@@ -32,6 +32,7 @@ columns that follow this format:
 
 ==================================================
 Versions:
+v1.2 - Jun 27 2017 - Support comments and ignore blank lines
 v1.1 - Apr 26 2016 - Use the same file naming logic as the derivedchars files
 v1.0 - Feb 21 2013 - Initial release
 """
@@ -76,6 +77,12 @@ def run(font, masterNumber):
 	anchorsList = []
 
 	for lineIndex in range(len(anchorsData)):
+		stripped_line = anchorsData[lineIndex].strip()
+
+		# skip comments and blank lines
+		if (not stripped_line) or (stripped_line.startswith('#')):
+			continue
+
 		anchorValuesList = anchorsData[lineIndex].split('\t')
 		if len(anchorValuesList) != 4: # Four columns: glyph name, anchor name, anchor X postion, anchor Y postion
 			print "ERROR: Line #%d does not have 4 columns. Skipped." % (lineIndex +1)
