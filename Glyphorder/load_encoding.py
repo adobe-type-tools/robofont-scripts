@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-# Load GlyphOrderAndAliasDB or encoding file as UFO glyph order.
+# Load GlyphOrderAndAliasDB_prod, GlyphOrderAndAliasDB or encoding
+# file as UFO glyph order.
 # The script can either be run from RF, or from the command line.
 # In RF, the glyph order will be loaded for the frontmost UFO.
 # On the command line, multiple UFO files can be passed as arguments.
@@ -11,7 +12,7 @@ import sys
 from defcon import Font
 
 
-def findFile(fileName, path, maxDepth=3):
+def findFile(fileName, path, maxDepth=4):
     '''
     Finds file `fileName` starting at `path`; moving up the
     directory tree until `maxDepth` is reached.
@@ -31,7 +32,7 @@ def findFile(fileName, path, maxDepth=3):
             return os.path.join(path, fileName)
 
 
-def findFileBySuffix(suffix, path, maxDepth=3):
+def findFileBySuffix(suffix, path, maxDepth=4):
     '''
     Finds file with suffix `suffix` starting at `path`; moving up the
     directory tree until `maxDepth` is reached.
@@ -94,9 +95,12 @@ def makeUniList(gList):
 def makeEnc(f, platform):
     fontDir = os.path.dirname(f.path)
     goaFile = findFile('GlyphOrderAndAliasDB', fontDir)
+    goaFile_p = findFile('GlyphOrderAndAliasDB_prod', fontDir)
     encFile = findFileBySuffix('.enc', fontDir)
 
-    if goaFile:
+    if goaFile_p:
+        sortFile = goaFile_p
+    elif goaFile:
         sortFile = goaFile
     elif encFile:
         sortFile = encFile
@@ -110,7 +114,7 @@ def makeEnc(f, platform):
                 directory=os.path.dirname(f.path),
                 fileName=None,
                 allowsMultipleSelection=False, fileTypes=None
-                )
+            )
 
         else:
             print 'No GlyphOrderAndAliasDB or .enc file found.'
@@ -179,15 +183,17 @@ if len(fontPaths):
 
         remainingGlyphs = sorted(list(set(f.keys()) - set(enc)))
 
-        f.lib['com.typemytype.robofont.sort'] = {
+        f.lib['com.typemytype.robofont.sort'] = [{
             'ascending': enc+remainingGlyphs,
-            'type': 'glyphList'}
+            'type': 'glyphList'}]
         f.lib['public.glyphOrder'] = enc+remainingGlyphs
 
         grey = [0.5, 0.5, 0.5, 0.5]
+        grey_UFO3 = ','.join([str(number) for number in grey])
         for gName in remainingGlyphs:
             if gName in f:
                 f[gName].lib['com.typemytype.robofont.mark'] = grey
+                # f[gName].lib['public.markColor'] = grey_UFO3
 
         if platform == 'CL':
             f.save()
