@@ -161,7 +161,7 @@ try:
     # in Robofont
     import mojo
     robofontFont = CurrentFont()
-    if robofontFont.path != None:
+    if robofontFont.path is not None:
         fontPaths = [robofontFont.path]
     else:
         fontPaths = []
@@ -183,10 +183,11 @@ if len(fontPaths):
 
         remainingGlyphs = sorted(list(set(f.keys()) - set(enc)))
 
-        f.lib['com.typemytype.robofont.sort'] = [{
-            'ascending': enc+remainingGlyphs,
-            'type': 'glyphList'}]
-        f.lib['public.glyphOrder'] = enc+remainingGlyphs
+        if f.lib.get('com.typemytype.robofont.sort'):
+            f.lib['com.typemytype.robofont.sort'] = [{
+                'ascending': enc + remainingGlyphs,
+                'type': 'glyphList'}]
+        f.lib['public.glyphOrder'] = enc + remainingGlyphs
 
         grey = [0.5, 0.5, 0.5, 0.5]
         grey_UFO3 = ','.join([str(number) for number in grey])
@@ -200,9 +201,7 @@ if len(fontPaths):
             print 'sorted', f.path
 
         if platform == 'RF':
-            # uniList = makeUniList(enc+remainingGlyphs)
-            # print uniList
-            robofontFont.glyphOrder = enc+remainingGlyphs
+            robofontFont.glyphOrder = enc + remainingGlyphs
             robofontFont.update()
             robofontFont.save()
 
