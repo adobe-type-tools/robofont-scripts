@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+from __future__ import print_function
 
 # Load GlyphOrderAndAliasDB_prod, GlyphOrderAndAliasDB or encoding
 # file as UFO glyph order.
@@ -117,10 +118,10 @@ def makeEnc(f, platform):
             )
 
         else:
-            print 'No GlyphOrderAndAliasDB or .enc file found.'
+            print('No GlyphOrderAndAliasDB or .enc file found.')
             sys.exit()
 
-    print 'Sorting by %s\n' % sortFile
+    print('Sorting by %s\n' % sortFile)
 
     if sortFile:
         encF = open(sortFile, 'r')
@@ -191,14 +192,20 @@ if len(fontPaths):
 
         grey = [0.5, 0.5, 0.5, 0.5]
         grey_UFO3 = ','.join([str(number) for number in grey])
+
         for gName in remainingGlyphs:
             if gName in f:
-                f[gName].lib['com.typemytype.robofont.mark'] = grey
-                # f[gName].lib['public.markColor'] = grey_UFO3
+                if f.ufoFormatVersion == 2:
+                    f[gName].lib['com.typemytype.robofont.mark'] = grey
+                else:
+                    f[gName].lib['public.markColor'] = grey_UFO3
 
         if platform == 'CL':
-            f.save()
-            print 'sorted', f.path
+            if f.ufoFormatVersion == 2:
+                f.save(formatVersion=2)
+            else:
+                f.save(formatVersion=3)
+            print('sorted', f.path)
 
         if platform == 'RF':
             robofontFont.glyphOrder = enc + remainingGlyphs
@@ -206,10 +213,10 @@ if len(fontPaths):
             robofontFont.save()
 
         if len(remainingGlyphs):
-            print 'Unencoded glyphs: %s\n' % ' '.join(remainingGlyphs)
+            print('Unencoded glyphs: %s\n' % ' '.join(remainingGlyphs))
 
 else:
     if platform == 'CL':
-        print 'Please specify one or more UFO files.'
+        print('Please specify one or more UFO files.')
     if platform == 'RF':
-        print 'Please save your font first.'
+        print('Please save your font first.')
