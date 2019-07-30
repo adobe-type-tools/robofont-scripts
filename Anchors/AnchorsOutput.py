@@ -1,5 +1,6 @@
+from __future__ import print_function
 __copyright__ = __license__ =  """
-Copyright (c) 2013-2016 Adobe Systems Incorporated. All rights reserved.
+Copyright (c) 2013-2019 Adobe Systems Incorporated. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -21,7 +22,11 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __doc__ = """
-Anchors Output v1.1 - Apr 26 2016
+Anchors Input v1.3 - 30 Jul 2019
+
+Updates print commands to use python 3 syntax.
+
+Anchors Output v1.1 - 26 Apr 2016
 
 Outputs all the anchor data to external text file(s) named 'anchors'.
 If the family has more than one master, '_X' is appended to the name,
@@ -29,8 +34,9 @@ where 'X' represents the index of the font master, counting from 0.
 
 ==================================================
 Versions:
-v1.1 - Apr 26 2016 - Use the same file naming logic as the derivedchars files
-v1.0 - Feb 21 2013 - Initial release
+v1.3 - 30 Jul 2019 - Updates print commands to use python 3 syntax
+v1.1 - 26 Apr 2016 - Use the same file naming logic as the derivedchars files
+v1.0 - 21 Feb 2013 - Initial release
 """
 
 #----------------------------------------
