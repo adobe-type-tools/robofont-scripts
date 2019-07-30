@@ -69,10 +69,10 @@ def run(font, masterNumber):
 		filePath = kAnchorsFileName
 
 	if not os.path.isfile(filePath):
-		print "ERROR: File %s not found." % filePath
+		print('ERROR: File %s not found.' % filePath)
 		return
 
-	print "Reading file %s ..." % filePath
+	print('Reading file %s ...' % filePath)
 	anchorsData = readFile(filePath)
 	anchorsList = []
 
@@ -85,21 +85,21 @@ def run(font, masterNumber):
 
 		anchorValuesList = anchorsData[lineIndex].split('\t')
 		if len(anchorValuesList) != 4: # Four columns: glyph name, anchor name, anchor X postion, anchor Y postion
-			print "ERROR: Line #%d does not have 4 columns. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d does not have 4 columns. Skipped.' % (lineIndex +1))
 			continue
 
 		glyphName = anchorValuesList[0]
 		anchorName = anchorValuesList[1]
 
 		if not len(glyphName) or not len(anchorName):
-			print "ERROR: Line #%d has no glyph name or no anchor name. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d has no glyph name or no anchor name. Skipped.' % (lineIndex +1))
 			continue
 
 		try:
 			anchorX = int(anchorValuesList[2])
 			anchorY = int(anchorValuesList[3])
 		except:
-			print "ERROR: Line #%d has an invalid anchor position value. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d has an invalid anchor position value. Skipped.' % (lineIndex +1))
 			continue
 
 		newAnchor = myAnchor(glyphName, anchorName, anchorX, anchorY)
@@ -107,7 +107,7 @@ def run(font, masterNumber):
 
 
 	if not len(anchorsList):
-		print "No valid anchors data was found."
+		print('No valid anchors data was found.')
 		return
 
 
@@ -124,25 +124,25 @@ def run(font, masterNumber):
 		if font.has_key(anchor.parent):
 			glyph = font[anchor.parent]
 		else:
-			print "ERROR: Glyph %s not found in the font." % anchor.parent
+			print('ERROR: Glyph %s not found in the font.' % anchor.parent)
 			continue
 
 		glyph.appendAnchor(anchor.name, (anchor.x, anchor.y))
 		glyph.glyphChangedUpdate()
 # 		glyph.mark = 125
 
-	print 'Done!'
+	print('Done!')
 
 
 if __name__ == "__main__":
 	font = CurrentFont()
 	if font == None:
-		print 'Open a font first.'
+		print('Open a font first.')
 	else:
 		if not font.path:
-			print "Save the font first."
+			print('Save the font first.')
 		elif not len(font):
-			print "The font has no glyphs."
+			print('The font has no glyphs.')
 		else:
 			folderPath, fileName = os.path.split(font.path)
 			fileNameNoExtension, fileExtension = os.path.splitext(fileName)

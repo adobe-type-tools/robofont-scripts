@@ -59,7 +59,7 @@ def run(font, masterNumber):
 
 			# Skip nameless anchors
 			if not len(anchor.name):
-				print "ERROR: Glyph %s has a nameless anchor. Skipped." % glyphName
+				print('ERROR: Glyph %s has a nameless anchor. Skipped.' % glyphName)
 				continue
 
 			anchorData = "%s\t%s\t%d\t%d\n" % (glyphName, anchor.name, anchor.x, anchor.y)
@@ -68,7 +68,7 @@ def run(font, masterNumber):
 
 
 	if not len(anchorsList):
-		print "The font has no anchors."
+		print('The font has no anchors.')
 		return
 
 
@@ -77,23 +77,23 @@ def run(font, masterNumber):
 		filename = "%s_%s" % (kAnchorsFileName, masterNumber)
 	else:
 		filename = kAnchorsFileName
-	print "Writing file %s ..." % filename
+	print('Writing file %s ...' % filename)
 	outfile = open(filename, 'w')
 	outfile.writelines(anchorsList)
 	outfile.close()
 
-	print 'Done!'
+	print('Done!')
 
 
 if __name__ == "__main__":
 	font = CurrentFont()
 	if font == None:
-		print 'Open a font first.'
+		print('Open a font first.')
 	else:
 		if not font.path:
-			print "Save the font first."
+			print('Save the font first.')
 		elif not len(font):
-			print "The font has no glyphs."
+			print('The font has no glyphs.')
 		else:
 			folderPath, fileName = os.path.split(font.path)
 			fileNameNoExtension, fileExtension = os.path.splitext(fileName)
