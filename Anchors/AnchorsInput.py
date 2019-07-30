@@ -1,5 +1,6 @@
+from __future__ import print_function
 __copyright__ = __license__ =  """
-Copyright (c) 2013-2016 Adobe Systems Incorporated. All rights reserved.
+Copyright (c) 2013-2019 Adobe Systems Incorporated. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -21,7 +22,11 @@ DEALINGS IN THE SOFTWARE.
 """
 
 __doc__ = """
-Anchors Input v1.2 - Jun 27 2017
+Anchors Input v1.3 - 30 Jul 2019
+
+Updates print commands to use python 3 syntax.
+
+Anchors Input v1.2 - 27 Jun 2017
 
 Adds anchors to the glyphs by reading the data from external text file(s) named
 'anchors'. If the family has more than one master, append '_X' to the name.
@@ -32,9 +37,10 @@ columns that follow this format:
 
 ==================================================
 Versions:
-v1.2 - Jun 27 2017 - Support comments and ignore blank lines
-v1.1 - Apr 26 2016 - Use the same file naming logic as the derivedchars files
-v1.0 - Feb 21 2013 - Initial release
+v1.3 - 30 Jul 2019 - Updates print commands to use python 3 syntax
+v1.2 - 27 Jun 2017 - Support comments and ignore blank lines
+v1.1 - 26 Apr 2016 - Use the same file naming logic as the derivedchars files
+v1.0 - 21 Feb 2013 - Initial release
 """
 
 #----------------------------------------
@@ -69,10 +75,10 @@ def run(font, masterNumber):
 		filePath = kAnchorsFileName
 
 	if not os.path.isfile(filePath):
-		print "ERROR: File %s not found." % filePath
+		print('ERROR: File %s not found.' % filePath)
 		return
 
-	print "Reading file %s ..." % filePath
+	print('Reading file %s ...' % filePath)
 	anchorsData = readFile(filePath)
 	anchorsList = []
 
@@ -85,21 +91,21 @@ def run(font, masterNumber):
 
 		anchorValuesList = anchorsData[lineIndex].split('\t')
 		if len(anchorValuesList) != 4: # Four columns: glyph name, anchor name, anchor X postion, anchor Y postion
-			print "ERROR: Line #%d does not have 4 columns. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d does not have 4 columns. Skipped.' % (lineIndex +1))
 			continue
 
 		glyphName = anchorValuesList[0]
 		anchorName = anchorValuesList[1]
 
 		if not len(glyphName) or not len(anchorName):
-			print "ERROR: Line #%d has no glyph name or no anchor name. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d has no glyph name or no anchor name. Skipped.' % (lineIndex +1))
 			continue
 
 		try:
 			anchorX = int(anchorValuesList[2])
 			anchorY = int(anchorValuesList[3])
 		except:
-			print "ERROR: Line #%d has an invalid anchor position value. Skipped." % (lineIndex +1)
+			print('ERROR: Line #%d has an invalid anchor position value. Skipped.' % (lineIndex +1))
 			continue
 
 		newAnchor = myAnchor(glyphName, anchorName, anchorX, anchorY)
@@ -107,7 +113,7 @@ def run(font, masterNumber):
 
 
 	if not len(anchorsList):
-		print "No valid anchors data was found."
+		print('No valid anchors data was found.')
 		return
 
 
@@ -124,25 +130,25 @@ def run(font, masterNumber):
 		if font.has_key(anchor.parent):
 			glyph = font[anchor.parent]
 		else:
-			print "ERROR: Glyph %s not found in the font." % anchor.parent
+			print('ERROR: Glyph %s not found in the font.' % anchor.parent)
 			continue
 
 		glyph.appendAnchor(anchor.name, (anchor.x, anchor.y))
 		glyph.glyphChangedUpdate()
 # 		glyph.mark = 125
 
-	print 'Done!'
+	print('Done!')
 
 
 if __name__ == "__main__":
 	font = CurrentFont()
 	if font == None:
-		print 'Open a font first.'
+		print('Open a font first.')
 	else:
 		if not font.path:
-			print "Save the font first."
+			print('Save the font first.')
 		elif not len(font):
-			print "The font has no glyphs."
+			print('The font has no glyphs.')
 		else:
 			folderPath, fileName = os.path.split(font.path)
 			fileNameNoExtension, fileExtension = os.path.splitext(fileName)
