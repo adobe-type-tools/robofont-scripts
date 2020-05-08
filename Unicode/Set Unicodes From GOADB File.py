@@ -27,7 +27,7 @@ Sets the glyphs' Unicode values according to a GOADB file.
 """
 
 import re
-from robofab.interface.all.dialogs import GetFile
+from mojo.UI import GetFile
 from fontTools.agl import AGL2UV as standardGlyphNamesDict
 
 re_gUniName = re.compile(r'^uni[A-F0-9]{4}$')
@@ -74,7 +74,7 @@ if path:
 				elif finalGlyphName in standardGlyphNamesDict:
 					unicodeMappingsDict[prodGlyphName] = standardGlyphNamesDict[finalGlyphName]
 		else:
-			print "Skipped line number %d: %s" % (lineNumber, line)
+			print('Skipped line number %d: %s' % (lineNumber, line))
 		lineNumber += 1
 
 	# Assign the Unicode values
@@ -82,4 +82,4 @@ if path:
 		if glyph.name in unicodeMappingsDict:
 			glyph.unicode = unicodeMappingsDict[glyph.name]
 
-	print "Done!"
+	print('Done!')

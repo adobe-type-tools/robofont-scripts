@@ -33,6 +33,6 @@ for glyph in font:
     glyph.unicode = None
 
 if len(font.getCharacterMapping().keys()):
-    print "ERROR: Some glyphs still have Unicode value."
+    print("ERROR: Some glyphs still have Unicode value.")
 else:
-    print "Done!"
+    print("Done!")
