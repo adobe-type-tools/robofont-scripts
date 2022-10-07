@@ -41,19 +41,19 @@ def run(font):
 			anchorFound = True
 
 	if anchorFound:
-		print 'Anchors were removed.'
+		print('Anchors were removed.')
 	else:
-		print 'The selected glyphs had no anchors.'
+		print('The selected glyphs had no anchors.')
 
 
 if __name__ == "__main__":
 	font = CurrentFont()
 	if font == None:
-		print 'Open a font first.'
+		print('Open a font first.')
 	else:
 		if not len(font):
-			print "The font has no glyphs."
+			print("The font has no glyphs.")
 		elif not len(font.selection):
-			print "Select the glyphs."
+			print("Select the glyphs.")
 		else:
 			run(font)
